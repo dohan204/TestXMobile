@@ -19,7 +19,7 @@ type ExamUserHistory = {
 }
 export default function ProfileScreen() {
   const {user} = useContextUser();
-  const userId = user?.nameid ?? '';
+  const userId = user?.nameid ?? 'empty';
   const {data, loading, error, refetch} = useFetchs<ExamUserHistory>(`https://api.testx.space/api/Exam/GetExamOfUser?accountId=${userId}`)
   const filterScore = useMemo(() => {
     if(!data) return;

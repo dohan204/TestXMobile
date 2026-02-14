@@ -30,7 +30,7 @@ export default function ExamListScreen() {
   // destrucruring 
   const { data, loading, error, refetch } = useFetchs<Subject>(`https://api.testx.space/api/Subject/subjects`);
 
-
+  console.log('data: ', data)
   // filter subject by module
   const filterSubjectByModule = React.useMemo(() => {
     if (!data) return []
@@ -48,7 +48,7 @@ export default function ExamListScreen() {
   if (loading)
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator color={'red'} size={'large'} />
+        <ActivityIndicator color={'blue'} size={'large'} />
       </View>
   )
   return (
@@ -62,7 +62,6 @@ export default function ExamListScreen() {
       columnWrapperStyle={{ gap: 28 }}
       ListHeaderComponent={() => (
         <>
-          
           <ExamCardHeaderComponent />
           <View style={styles.subjectCard}>
             <Text style={styles.headerTitle}>Chủ đề hiện có:</Text>
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
     // flexWrap: ''
   },
   subjectCardContent: {
-    width: 165,
+    flex: 1,
     height: 160,
     borderRadius: 10,
     backgroundColor: '#7fffd4',

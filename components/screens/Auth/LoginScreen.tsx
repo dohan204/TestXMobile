@@ -34,10 +34,10 @@ const LoginScreen = () => {
         setLoading(true)
         try {
             console.log('hello')
-            const response = await axios.post('http://192.168.1.137:5000/api/Account/login-mobile', data);
+            const response = await axios.post('https://api.testx.space/api/Account/login-mobile', data);
             if(response) {
                 const token = response.data ?? 'Empty';
-                await useStoreData(token);
+                await useStoreData('access-token', token);
                 console.log('data response: ', response.data);
             }
             console.log('data response: ', response.data);
@@ -85,6 +85,11 @@ const LoginScreen = () => {
                     </Pressable>
                     <ButtonCustome title='Đăng nhập' onPress={handleSubmit(onSubmit)} loading={loading} />
                 </View>
+                <Pressable onPress={() => navigation.navigate('Auth', {
+                    screen: 'Register'
+                })}>
+                    <Text>Bạn chưa có tài khoản? Đăng ký</Text>
+                </Pressable>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )

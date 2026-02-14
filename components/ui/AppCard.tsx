@@ -12,7 +12,7 @@ type Props = {
     details?: ExamDetails,
     buttonTitle?: string
 }
-export default function AppCard({title, onPress, details, buttonTitle }:Props) {
+export default function AppCardExam({title, onPress, details, buttonTitle }:Props) {
   return (
     <View style={styles.container}>
         <Text style={styles.textHeader}>{title}</Text>

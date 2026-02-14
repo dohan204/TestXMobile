@@ -4,7 +4,7 @@ import styles from '@/components/styles/commonStyle';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Alert, Keyboard, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as z from 'zod';
 
@@ -37,9 +37,9 @@ export default function RegisterScreen() {
         }, 3000)
     }
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} edges={['left', 'right']}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1 }}>
                     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
                         <View style={styles.container}>
                             <View style={styles.formData}>
@@ -68,7 +68,7 @@ export default function RegisterScreen() {
                             </View>
                         </View>
                     </KeyboardAvoidingView>
-                </View>
+                </ScrollView>
             </TouchableWithoutFeedback>
         </SafeAreaView>
     )

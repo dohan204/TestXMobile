@@ -1,37 +1,44 @@
-import CardHeaderComponent from '@/components/comp/CardHeaderComponent'
-import FeatureComponent from '@/components/comp/FeatureComponent'
+import HomeCategoriesComponent from '@/components/comp/HomeCategoriesComponent'
 import { Fonts } from '@/constants/theme'
 import { useContextUser } from '@/hooks/useContextUser'
-import { RootStackParamList } from '@/types/type.d'
+import { RootHomeTabWithChildParamList } from '@/types/type.d'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useNavigation } from 'expo-router'
 import React from 'react'
 import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
+type HomeNav = NativeStackNavigationProp<RootHomeTabWithChildParamList>;
+
 export default function HomeScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<HomeNav>();
   const { user } = useContextUser();
+  const handleNavigator = () => {
+   navigation.push('Notifications');
+  }
   return (
-    <SafeAreaView edges={['left', 'right', ]} style={{ flex: 1 }}>
+    <SafeAreaView edges={['left', 'right',]} style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }} contentContainerStyle={{ paddingBottom: 32 }}>
         <View
           style={styleInline.homTop}
         >
-          <Text style={[styleInline.headerTopHome, { textTransform: 'uppercase' }]}>Xin chào {user?.fullName},</Text>
-          <Text style={[styleInline.headerTopHome, {fontFamily: Fonts.sans}]}>
-            Chào mừng Đến với Test X!!
-          </Text>
-        </View>
-        <View style={{flex: 2, alignItems: 'flex-end', padding: 10, flexDirection: 'row', gap: 15}}>
-          <CardHeaderComponent title='Số giờ Online' icon='alarm-outline' />
-          <CardHeaderComponent title='Số giờ Online' icon='alarm-outline' />
+          <View>
+            <Text style={[styleInline.headerTopHome]}>Xin chào {user?.fullName}</Text>
+            <Text style={{fontStyle: 'italic'}}>Hôm nay bạn muốn luyện tập gì?</Text>
+          </View>
+          <Pressable style={({pressed}) => [styleInline.notificationButton, {opacity: pressed ? 0.7 : 1}]}
+            onPress={handleNavigator}
+          >
+            <Ionicons name='notifications-outline' size={24} />
+          </Pressable>
         </View>
         <View style={styleInline.topBanner}>
           <View style={styleInline.topBanneritem} >
-            <Text 
+            <Text
               numberOfLines={10}
-              style={{fontSize: 20, letterSpacing: 5}}
+              style={{ fontSize: 20, letterSpacing: 5 }}
             >
               Tham gia các bài thi Đáng giá cùng chún tôi,
               bộc phát tiềm năng của bạn
@@ -40,7 +47,7 @@ export default function HomeScreen() {
           <View style={styleInline.topBanneritem}>
             <Image
               source={require('../../../assets/images/imgexam.jpg')}
-              style={{width: 200, height: 200, paddingRight: 30}}
+              style={{ width: 200, height: 200, paddingRight: 30 }}
             />
           </View>
         </View>
@@ -60,35 +67,30 @@ export default function HomeScreen() {
             </Pressable>
           </View>
         </LinearGradient>
-        <LinearGradient
-          colors={['#ffb6c1', '#82ffa1']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styleInline.homeContent}
-          dither
-        >
-          <Text style={styleInline.headerTopHome}>Thông tin Nổi bật</Text>
-          <View style={styleInline.OutstandingContent}>
-            <FeatureComponent title='Người dùng' />
-            <FeatureComponent title='Người dùng' />
-            <FeatureComponent title='Người dùng' />
-            <FeatureComponent title='Người dùng' />
-          </View>
-        </LinearGradient>
+        <HomeCategoriesComponent />
       </ScrollView>
     </SafeAreaView>
   )
 }
 
+
+const styles = StyleSheet.create({
+  box: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'purple'
+  }
+})
 const styleInline = StyleSheet.create({
   homTop: {
     flex: 2,
     paddingHorizontal: 20,
     borderRadius: 15,
     marginVertical: 20,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    padding: 25
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 15
   },
   topBanner: {
     flexDirection: 'row',
@@ -104,9 +106,14 @@ const styleInline = StyleSheet.create({
     padding: 10
   },
   headerTopHome: {
-    fontSize: 30,
+    fontSize: 24,
     fontFamily: Fonts.mono,
-    fontWeight: '500',
+    fontWeight: '700',
+  },
+  notificationButton: {
+    backgroundColor: 'red',
+    padding: 15,
+    borderRadius: 40
   },
   homeContent: {
     flex: 4,

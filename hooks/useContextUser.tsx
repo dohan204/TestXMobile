@@ -25,7 +25,7 @@ export const UserContextProvider = ({ children }: ContextProviderProps) => {
     useEffect(() => {
         const decodedToken = async () => {
             try {
-                const token = await useReadData('my-info');
+                const token = await useReadData('access-token');
                 if (token) {
                     const decoded: contextUser = jwtDecode(token);
                     setUser(decoded)

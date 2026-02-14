@@ -1,94 +1,82 @@
-
-import CustomDrawerContent from "@/components/custom/DividerSeparator";
-import ExamSubjectDetailsScreen from "@/components/screens/exams/ExamSubjectDetailsScreen";
+import ExamResultScreen from "@/components/screens/childScreen/ExamResultScreen";
+import ExamStartingScreen from "@/components/screens/childScreen/ExamStartingScreen";
+import ExamSubjectDetailsScreen from "@/components/screens/childScreen/ExamSubjectDetailsScreen";
+import NotificationsScreen from "@/components/screens/childScreen/NotificationsScreen";
+import StudyHistoryScreen from "@/components/screens/childScreen/StudyHistoryScreen";
 import ExamListScreen from "@/components/screens/main/ExamListScreen";
 import HomeScreen from "@/components/screens/main/HomeScreen";
 import OverallRatingScreen from "@/components/screens/main/OverallRatingScreen";
-import ChangeInfoScreen from "@/components/screens/user/ChangeInfoScreen";
-import ProfileScreen from "@/components/screens/user/ProfileScreen";
-import RatingMeScreen from "@/components/screens/user/RatingMeScreen";
-import { useContextUser } from "@/hooks/useContextUser";
-import { RootExamTabWithChildParamList, RootHomeParamList, RootHomeTabParamList, RootStackParamList } from "@/types/type.d";
+import ProfileScreen from "@/components/screens/main/ProfileScreen";
+import Header from "@/hooks/helper/headerComponentHelper";
+import { RootExamTabWithChildParamList, RootHomeTabWithChildParamList, RootMainAllTabParamList } from "@/types/type.d";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable, Text } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type IoniconsName = keyof typeof Ionicons.glyphMap
-const Drawer = createDrawerNavigator<RootHomeParamList>();
 
-// home Drawer
-export const HomeTabs = () => {
-    const { user } = useContextUser();
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+// home tab 
+const HomeStack = createNativeStackNavigator<RootHomeTabWithChildParamList>();
+export const StackHomeTab = () => {
     return (
-        <Drawer.Navigator
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
-        >
-            <Drawer.Screen
-                name='MainTab'
-                component={HomeDrawer}
+        <HomeStack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+            <HomeStack.Screen name="Home" component={HomeScreen} />
+            <HomeStack.Screen name="Notifications" component={NotificationsScreen} options={({ navigation }) => ({
+                headerShown: true,
+                header: () => <Header headerTitle="Thông báo" />
+            })} />
+            <HomeStack.Screen 
+                name="StudyHistory" 
+                component={StudyHistoryScreen} 
                 options={{
-                    title: 'Trang chủ',
-                    headerRight: () => (
-                        user != undefined ?
-                            (
-                                <Ionicons name="person-circle-outline" size={24} />
-                            ) :
-                            (
-                                <Pressable
-                                    style={{ paddingRight: 16 }}
-                                    onPress={() => navigation.navigate('Auth', {
-                                        screen: 'Login'
-                                    })}>
-                                    <Text>Login</Text>
-                                </Pressable>
-                            )
-                    )
-                    // ,headerShown: false
-                }}
-            />
-            <Drawer.Screen name='InfoMe' component={ProfileScreen} options={{ title: 'Thông tin Chi tiết' }} />
-            <Drawer.Screen name='RatingMe' component={RatingMeScreen} options={{ title: 'Xếp hạng cá nhân' }} />
-            <Drawer.Screen name='Update' component={ChangeInfoScreen} options={{ title: 'Thay đổi thông tin' }} />
-        </Drawer.Navigator>
+                    headerShown: true,
+                    header: () => <Header headerTitle="Tiến độ học tập" />
+                }} />
+        </HomeStack.Navigator>
+    )
+}
+// exam tab
+const Stack = createNativeStackNavigator<RootExamTabWithChildParamList>();
+export const StackExamTab = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='Exam' component={ExamListScreen} />
+            <Stack.Screen name='ExamSubjectDetails' component={ExamSubjectDetailsScreen} />
+            <Stack.Screen name='ExamStarting' component={ExamStartingScreen} />
+            <Stack.Screen name='ExamResult' component={ExamResultScreen} />
+        </Stack.Navigator>
     )
 }
 
-// exam tab
-const StackExam = createNativeStackNavigator<RootExamTabWithChildParamList>();
-export const TabParent = () => {
-    return (
-        <StackExam.Navigator screenOptions={{headerShown: false}}>
-            <StackExam.Screen name='Exam' component={ExamListScreen} />
-            <StackExam.Screen name='ExamSubjectDetails' component={ExamSubjectDetailsScreen} />
-        </StackExam.Navigator>
-    )
-}
 
 // tab bottom
-const Tab = createBottomTabNavigator<RootHomeTabParamList>();
-export const HomeDrawer = () => {
+const Tab = createBottomTabNavigator<RootMainAllTabParamList>();
+export const TabMain = () => {
     return (
-        <Tab.Navigator screenOptions={({route}) => ({
-            headerShown: false,
-            tabBarIcon: ({focused, color, size}) => {
-                let iconName: IoniconsName; 
-                if(route.name === 'HomeGroup') {
-                    iconName = focused ? 'home' : 'home-outline'
-                } else if (route.name === 'ExamParent' ) {
-                    iconName = focused ? 'reader' : 'reader-outline'
-                } else {
-                    iconName = focused ? 'book' : 'book-outline'
+        <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'top']}>
+            <Tab.Navigator screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName: IoniconsName;
+                    if (route.name === 'HomeGroup') {
+                        iconName = focused ? 'home' : 'home-outline'
+                    } else if (route.name === 'ExamParent') {
+                        iconName = focused ? 'reader' : 'reader-outline'
+                    } else if (route.name === 'Profile') {
+                        iconName = focused ? 'person' : 'person-outline'
+                    } else {
+                        iconName = focused ? 'book' : 'book-outline'
+                    }
+                    return <Ionicons name={iconName} color={color} size={size} />
                 }
-                return <Ionicons name={iconName} color={color} size={size} />
-            }
-        })}>
-            <Tab.Screen name='HomeGroup' component={HomeScreen} />
-            <Tab.Screen name='ExamParent' component={TabParent} />
-            <Tab.Screen name='Rating' component={OverallRatingScreen} />
-        </Tab.Navigator>
+            })}>
+                <Tab.Screen name='HomeGroup' component={StackHomeTab} options={{ title: 'Trang chủ' }} />
+                <Tab.Screen name='ExamParent' component={StackExamTab} options={{ title: 'Bài thi' }} />
+                <Tab.Screen name='Rating' component={OverallRatingScreen} options={{ title: 'Xếp hạng' }} />
+                <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: '' }} />
+            </Tab.Navigator>
+        </SafeAreaView>
     )
 }

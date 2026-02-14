@@ -33,12 +33,12 @@ export function InputCustom<IFormValues extends FieldValues>(
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 10 },
-  label: { marginBottom: 5, fontWeight: '400', fontSize: 16 },
+  container: { padding: 10,  },
+  label: { marginBottom: 10, fontWeight: '400', fontSize: 16, },
   input: {
     borderWidth: 1,
     padding: 10,
-    width: 240,
+    width: 280,
     borderRadius: 5,
     borderColor: '#ccc',
   },
