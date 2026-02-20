@@ -16,6 +16,8 @@ export default function HomeCategoriesComponent() {
               iconName='alarm-outline' 
               size={48} 
               title='Thử thách thời gian'
+              navigation='HomeGroup'
+              navigationChild='TestOfTime'
               />
         </View>
          <View style={{flexDirection: 'row'}}>
@@ -28,7 +30,9 @@ export default function HomeCategoriesComponent() {
             <HomeCategoriesItemComponent 
               iconName='accessibility-outline' 
               size={48} 
-              title='Cộng đồng' />
+              title='Cộng đồng'
+              navigation='HomeGroup'
+              navigationChild='Community' />
         </View>
     </View>
   )

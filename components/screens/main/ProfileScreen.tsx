@@ -1,10 +1,10 @@
-import AppInfo from '@/components/ui/AppInfo'
 import { Fonts } from '@/constants/theme'
 import { useContextUser } from '@/hooks/useContextUser'
 import useFetchs from '@/hooks/useFetchData'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { Skeleton } from '@rneui/themed'
 import React, { useMemo } from 'react'
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 type ExamUserHistory = {
   examId: number,
@@ -26,7 +26,14 @@ export default function ProfileScreen() {
     return data.sort((item, index) => item.score - index.score);
   }, [data])
   if(loading) {
-    return <ActivityIndicator color={'red'} size={'large'} />
+    return (
+      <View style={{flex: 1}}>
+        <Skeleton width={'100%'} height={100} style={{borderBottomLeftRadius: 24, borderBottomRightRadius: 24}} animation='pulse' />
+        <Skeleton circle width={80} height={80} style={styles.skeletonAvatar} />
+        <Skeleton width={120} height={30} style={{marginTop: 40, alignSelf: 'center'}} animation='pulse' />
+        <Skeleton width={200} height={20} style={{marginTop: 10, alignSelf: 'center'}} animation='pulse' />
+      </View>
+    )
   }
   return (
     <FlatList
@@ -35,11 +42,8 @@ export default function ProfileScreen() {
       ListHeaderComponent={() => (
         <>
           <View>
-            <Image
-              source={require('../../../assets/images/backgroundInfo.jpg')}
-              style={styles.imageSwapper}
-              resizeMode='cover'
-            />
+            <View style={styles.imageSwapper}>
+            </View>
             <View style={styles.avatarWrapper}>
               <Ionicons name='person' size={80} style={{ backgroundColor: 'white' }} />
             </View>
@@ -51,14 +55,7 @@ export default function ProfileScreen() {
           <View style={styles.containerInfo}>
             <Text style={styles.headerInfo}>Hoạt động của tài khoản</Text>
             <View style={{ gap: 10, marginVertical: 10 }}>
-              <AppInfo title='Số bài thi đã thực hiện' value={40} />
-              <AppInfo title='Điểm thi cao nhất' value={10} />
             </View>
-          </View>
-          <View>
-            <Text>
-              Lịch sử thi
-            </Text>
           </View>
         </>
       )}
@@ -90,7 +87,8 @@ const styles = StyleSheet.create({
   },
   imageSwapper: {
     width: '100%',
-    height: 200,
+    height: 100,
+    backgroundColor: '#00ffff',
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     overflow: 'hidden',
@@ -102,6 +100,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: Fonts.sans,
     fontWeight: '400'
+  }, 
+  skeletonLoading: {
+    width: '100%',
+    height: 80,
+    borderRadius: 8,
+    marginBottom: 10
+  },
+  skeletonAvatar: {
+    position: 'absolute',
+    top: 60,
+    left: '50%',
+    transform: [{ translateX: -40 }],
+    borderWidth: 3,
+    borderColor: '#fff',
+    backgroundColor: '#F3F4F6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
   }
 })
 

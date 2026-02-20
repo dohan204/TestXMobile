@@ -23,8 +23,8 @@ export default function StudyHistoryScreen() {
             ListHeaderComponent={() => (
                 <View style={styles.container}>
                     <View style={styles.headerPannerComponent}>
-                        <Text>HI {user?.fullName}</Text>
-                        <Text>Bạn đang trong top những thàng ngu nhất hành tinh</Text>
+                        <Text style={{fontSize: 18, fontWeight: 'bold' }}>Hi, {user?.fullName}</Text>
+                        <Text>Phía dưới là thành tích của bạn !!</Text>
                     </View>
                     {/* overview */}
                     <OverviewCardComponent data={data} />
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     },
     headerPannerComponent: {
         height: 80,
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
         borderRadius: 10,
         marginHorizontal: 8,
         padding: 10,

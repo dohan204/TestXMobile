@@ -37,7 +37,7 @@ export function OverviewCardItemComponent({ title, value }: Props) {
 const styles = StyleSheet.create({
     overViewContent: {
         marginHorizontal: 10,
-        backgroundColor: 'yellow',
+        backgroundColor: '#90D5FF',
         marginTop: 10,
         padding: 10,
     },

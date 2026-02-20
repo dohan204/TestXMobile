@@ -58,7 +58,7 @@ export default function ExamSubjectDetailsScreen() {
       }}
       contentContainerStyle={{ paddingHorizontal: 20, rowGap: 20 }}
       renderItem={({ item }) => (
-        <AppCard title={item.examName} onPress={() => !user ? handleUserNotLogin() : handleUserLogin(item.id, item.examName, item.testingTime, item.numberOfQuestion)} details={item} buttonTitle='Làm bài' />
+        <AppCard title={item.examName} onPress={() => !user ? handleUserNotLogin() : handleUserLogin(item.id, item.examName, item.testingTime, item.numberOfQuestion)} details={{numberOfQuestion: item.numberOfQuestion, subjectName: item.examName}} buttonTitle='Làm bài' />
       )}
     // ListFooterComponent={<AppCard title='hello' onPress={() => Alert.alert('hello anh em')} />}
     />

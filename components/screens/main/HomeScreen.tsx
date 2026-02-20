@@ -4,17 +4,18 @@ import { useContextUser } from '@/hooks/useContextUser'
 import { RootHomeTabWithChildParamList } from '@/types/type.d'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type HomeNav = NativeStackNavigationProp<RootHomeTabWithChildParamList>;
-
-export default function HomeScreen() {
+type Props = NativeStackScreenProps<RootHomeTabWithChildParamList, 'Home'>;
+export default function HomeScreen({ route }: Props) {
   const navigation = useNavigation<HomeNav>();
   const { user } = useContextUser();
+  const { examId, examName } = route.params || {};
   const handleNavigator = () => {
    navigation.push('Notifications');
   }
@@ -34,14 +35,25 @@ export default function HomeScreen() {
             <Ionicons name='notifications-outline' size={24} />
           </Pressable>
         </View>
+        {examId && examName && (
+          <View style={{padding: 10, margin: 10, backgroundColor: '#f0f8ff', borderRadius: 10}}>
+            <Text style={{fontSize: 16, fontWeight: '500'}}>Đang thi: {examName}</Text>
+          </View>
+        )}
         <View style={styleInline.topBanner}>
           <View style={styleInline.topBanneritem} >
             <Text
               numberOfLines={10}
-              style={{ fontSize: 20, letterSpacing: 5 }}
+              style={{ fontSize: 16, fontWeight: '500', marginBottom: 10 }}
             >
               Tham gia các bài thi Đáng giá cùng chún tôi,
               bộc phát tiềm năng của bạn
+            </Text>
+            <Text
+              numberOfLines={10}
+              style={{ fontSize: 16, fontWeight: '500' }}
+            >
+              Khẳng định năng lực qua từng câu hỏi, tiến gần hơn đến mục tiêu của bạn.
             </Text>
           </View>
           <View style={styleInline.topBanneritem}>

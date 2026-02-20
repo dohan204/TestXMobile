@@ -1,8 +1,10 @@
+import CommunityScreen from "@/components/screens/childScreen/CommunityScreen";
 import ExamResultScreen from "@/components/screens/childScreen/ExamResultScreen";
 import ExamStartingScreen from "@/components/screens/childScreen/ExamStartingScreen";
 import ExamSubjectDetailsScreen from "@/components/screens/childScreen/ExamSubjectDetailsScreen";
 import NotificationsScreen from "@/components/screens/childScreen/NotificationsScreen";
 import StudyHistoryScreen from "@/components/screens/childScreen/StudyHistoryScreen";
+import TestOfTimeScreen from "@/components/screens/childScreen/TestOfTimeScreen";
 import ExamListScreen from "@/components/screens/main/ExamListScreen";
 import HomeScreen from "@/components/screens/main/HomeScreen";
 import OverallRatingScreen from "@/components/screens/main/OverallRatingScreen";
@@ -34,16 +36,39 @@ export const StackHomeTab = () => {
                     headerShown: true,
                     header: () => <Header headerTitle="Tiến độ học tập" />
                 }} />
+            <HomeStack.Screen 
+                name='Community' 
+                component={CommunityScreen}
+                options={{
+                    headerShown: true,
+                    header: () => <Header headerTitle="Cộng đồng" />
+                }} 
+            />
+            <HomeStack.Screen
+                name="TestOfTime"
+                component={TestOfTimeScreen}
+                options={{
+                    headerShown: true,
+                    header: () => <Header headerTitle="Thử thách thời gian" />
+                }}
+            />
         </HomeStack.Navigator>
     )
 }
+
 // exam tab
 const Stack = createNativeStackNavigator<RootExamTabWithChildParamList>();
 export const StackExamTab = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Exam' component={ExamListScreen} />
-            <Stack.Screen name='ExamSubjectDetails' component={ExamSubjectDetailsScreen} />
+            <Stack.Screen 
+                name='ExamSubjectDetails' 
+                component={ExamSubjectDetailsScreen} 
+                options={{
+                    headerShown: true,
+                    header: () => <Header headerTitle="Đề thi" />
+                }} />
             <Stack.Screen name='ExamStarting' component={ExamStartingScreen} />
             <Stack.Screen name='ExamResult' component={ExamResultScreen} />
         </Stack.Navigator>

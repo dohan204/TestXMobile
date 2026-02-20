@@ -32,13 +32,21 @@ export type AnswerResponse = {
 // tab exam with child
 export type RootExamTabWithChildParamList = {
     Exam: undefined, // index
-    ExamSubjectDetails: {subjectId: number, name?: string, code: string},
-    ExamStarting: {examId: number, examName: string, testingTime: number, numberOfQuestion: number};
-    ExamResult: {response: AnswerResponse};
+    ExamSubjectDetails: { subjectId: number, name?: string, code: string },
+    ExamStarting: { examId: number, examName: string, testingTime: number, numberOfQuestion: number };
+    ExamResult: { response: AnswerResponse };
 }
 
 export type RootHomeTabWithChildParamList = {
-    Home: undefined, // index
+    Home: { examId?: number, examName?: string }, // index
     Notifications: undefined,
-    StudyHistory: undefined
+    StudyHistory: undefined,
+    Community: undefined,
+    TestOfTime: undefined
+}
+
+export type RootComunityTabWithChildParamList = {
+    Comunity: undefined, // index
+    LeaderboardScreen: undefined,
+    PostScreen: undefined,
 }

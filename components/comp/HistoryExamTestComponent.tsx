@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        marginHorizontal: 8,
         marginVertical: 10,
         borderRadius: 10,
     },

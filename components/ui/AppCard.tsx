@@ -3,7 +3,7 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 type ExamDetails = {
     numberOfQuestion: number,
-    testingTime: number,
+    testingTime?: number,
     subjectName: string
 }
 type Props = {
@@ -16,7 +16,7 @@ export default function AppCardExam({title, onPress, details, buttonTitle }:Prop
   return (
     <View style={styles.container}>
         <Text style={styles.textHeader}>{title}</Text>
-        <Text style={styles.textDetails}>Số câu hỏi: {details?.numberOfQuestion}, thời gian: {details?.testingTime}</Text>
+        <Text style={styles.textDetails}>Số câu hỏi: {details?.numberOfQuestion} {details?.testingTime === undefined ? '' : `, Thời gian: ${details?.testingTime} phút`}</Text>
         <Pressable style={({pressed}) => 
             [
                 styles.buttonPosition, styles.buttonStyle, 
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 150,
         borderRadius: 10,
-        backgroundColor: '#c0c0c0',
+        backgroundColor: '#ce6a6a',
         position: 'relative'
     },
     buttonPosition: {
@@ -43,12 +43,15 @@ const styles = StyleSheet.create({
         bottom: 20
     },
     buttonStyle: {
-        backgroundColor: '#00ff7f',
+        backgroundColor: '#fff',
         borderRadius: 10,
         width: 'auto',
         height: 40,
         justifyContent: 'center',
         padding: 10,
+        outlineWidth: 5,
+        outlineColor: '#00ff7f',
+        outlineStyle: 'solid'
     },
     textHeader: {
         padding: 20,
@@ -56,11 +59,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: Fonts.sans,
         fontWeight: 'bold',
+        color: '#fff'
     },
     textDetails: {
         fontStyle: 'italic',
         position: 'absolute',
         top: 50,
-        left: 30
+        left: 30,
+        color: '#fff'
     }
 })
