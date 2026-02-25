@@ -1,6 +1,5 @@
 import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import FooterComponent from './FooterTableComponent'
 type SubjectRatingDataModel = {
     id: number,
     name: string,
@@ -37,7 +36,7 @@ export default function RatingsSubjectComponent() {
             data={dataTest}
             keyExtractor={item => item.id + ''}
             ListHeaderComponent={TableHeader}
-            ListFooterComponent={FooterComponent}
+            // ListFooterComponent={FooterComponent}
             stickyHeaderIndices={[0]}
             renderItem={renderItem}
         />

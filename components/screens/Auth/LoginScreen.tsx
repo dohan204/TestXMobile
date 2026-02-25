@@ -1,11 +1,14 @@
 import { ButtonCustome } from '@/components/custom/ButtonCustom';
 import { InputCustom } from '@/components/custom/InputCustom';
+import { contextUser } from '@/contexts/contextUser';
+import { useContextUser } from '@/hooks/useContextUser';
 import { useStoreData } from '@/stores/useStoreData';
 import { RootMergeAuthHomeParamList } from '@/types/type.d';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios, { AxiosError } from 'axios';
 import { useNavigation } from 'expo-router';
+import { jwtDecode } from 'jwt-decode';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, View } from "react-native";
@@ -20,7 +23,7 @@ type LoginScreen = z.infer<typeof schema>;
 const LoginScreen = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation<NativeStackNavigationProp<RootMergeAuthHomeParamList>>();
-
+    const { login } = useContextUser();
     const { control, handleSubmit, formState: { errors } } = useForm<LoginScreen>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -35,18 +38,27 @@ const LoginScreen = () => {
         try {
             console.log('hello')
             const response = await axios.post('https://api.testx.space/api/Account/login-mobile', data);
-            if(response) {
                 const token = response.data ?? 'Empty';
                 await useStoreData('access-token', token);
                 console.log('data response: ', response.data);
-            }
-            console.log('data response: ', response.data);
-            navigation.navigate('Home', {
-                screen: 'MainTab'
+
+            const decodeUser = jwtDecode<contextUser>(token);
+            login(decodeUser, token);
+            navigation.reset({
+                index: 0,
+                routes: [
+                    {
+                        name: 'Home',
+                        params: {
+                            screen: 'HomeGroup',
+                            params: { screen: 'Home' }
+                        }
+                    }
+                ]
             });
         } catch (err) {
-            if(err instanceof AxiosError) {
-                if(err.response?.status === 500) {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 500) {
                     Alert.alert("Lỗi", `${err.response.statusText}`)
                 } else if (err.response?.status === 404) {
                     Alert.alert("Lỗi", `${err.response.statusText}`)
@@ -80,7 +92,7 @@ const LoginScreen = () => {
                     />
                     <Pressable onPress={() => navigation.navigate('Auth', {
                         screen: 'Forgot'
-                    })}> 
+                    })}>
                         <Text style={styles.forgotText}>Quên mật khẩu</Text>
                     </Pressable>
                     <ButtonCustome title='Đăng nhập' onPress={handleSubmit(onSubmit)} loading={loading} />

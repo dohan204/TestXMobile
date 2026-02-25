@@ -1,5 +1,8 @@
 import { contextUser, UserContextType } from "@/contexts/contextUser";
-import { useReadData } from "@/stores/useStoreData";
+import { RemoveStorage, useReadData, useStoreData } from "@/stores/useStoreData";
+import { RootMainAllTabParamList } from "@/types/type.d";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { jwtDecode } from 'jwt-decode';
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { Text } from "react-native";
@@ -13,15 +16,27 @@ export const useContextUser = () => {
     return context;
 }
 
-type ContextProviderProps = {
-    children: ReactNode;
-}
-
-export const UserContextProvider = ({ children }: ContextProviderProps) => {
+export const UserContextProvider = ({ children }: {children: ReactNode}) => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootMainAllTabParamList>>();
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState<contextUser | null>(null);
-    const login = (user: contextUser) => setUser(user);
-    const logout = () => setUser(null); 
+    const login = async (user: contextUser, token: string) => {
+        await useStoreData('access-token', token);
+        setUser(user);
+    }
+    const logout =  async () => {
+        setUser(null);
+        await RemoveStorage('access-token');
+        navigation.reset({
+            index: 0,
+            routes:  [
+                {
+                    name: 'HomeGroup',
+                    params: {screen: 'Home'}
+                }
+            ]
+        })
+    }
     useEffect(() => {
         const decodedToken = async () => {
             try {
@@ -30,7 +45,6 @@ export const UserContextProvider = ({ children }: ContextProviderProps) => {
                     const decoded: contextUser = jwtDecode(token);
                     setUser(decoded)
                 }
-                setLoading(false);
             } catch(err) {
                 console.error(err)
             } finally {
@@ -40,7 +54,7 @@ export const UserContextProvider = ({ children }: ContextProviderProps) => {
         decodedToken();
     }, [])
 
-    const value = useMemo(() => ({user, login, logout}) ,[loading, user])
+    const value = useMemo(() => ({user, login, logout}) ,[user])
     return (
         <ContextUser.Provider value={value}>
             {!loading ? children : <Text>Loading...</Text>}

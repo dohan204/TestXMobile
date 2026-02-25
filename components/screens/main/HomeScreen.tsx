@@ -1,23 +1,41 @@
 import HomeCategoriesComponent from '@/components/comp/HomeCategoriesComponent'
 import { Fonts } from '@/constants/theme'
 import { useContextUser } from '@/hooks/useContextUser'
-import { RootHomeTabWithChildParamList } from '@/types/type.d'
+import { RootHomeTabWithChildParamList, RootMainAllTabParamList, RootMergeAuthHomeParamList } from '@/types/type.d'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type HomeNav = NativeStackNavigationProp<RootHomeTabWithChildParamList>;
 type Props = NativeStackScreenProps<RootHomeTabWithChildParamList, 'Home'>;
 export default function HomeScreen({ route }: Props) {
-  const navigation = useNavigation<HomeNav>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootHomeTabWithChildParamList>>();
   const { user } = useContextUser();
   const { examId, examName } = route.params || {};
+  const navigationFastExam = () => {
+    navigation.
+      getParent<NativeStackNavigationProp<RootMainAllTabParamList>>()
+      ?.navigate('ExamParent', {
+        screen: 'ExamStarting',
+        params: {},  
+      })
+  }
+
+  const navigationAuthLogin = () => {
+    // vươn ra ngoài thằng cha
+    navigation.getParent<NativeStackNavigationProp<RootMainAllTabParamList>>()
+      ?.getParent<NativeStackNavigationProp<RootMergeAuthHomeParamList>>()
+      ?.navigate('Auth', {
+        screen: 'Login'
+      })
+  }
+
   const handleNavigator = () => {
-   navigation.push('Notifications');
+    navigation.navigate('Notifications');
   }
   return (
     <SafeAreaView edges={['left', 'right',]} style={{ flex: 1 }}>
@@ -29,11 +47,17 @@ export default function HomeScreen({ route }: Props) {
             <Text style={[styleInline.headerTopHome]}>Xin chào {user?.fullName}</Text>
             <Text style={{fontStyle: 'italic'}}>Hôm nay bạn muốn luyện tập gì?</Text>
           </View>
-          <Pressable style={({pressed}) => [styleInline.notificationButton, {opacity: pressed ? 0.7 : 1}]}
+          {user ? (
+            <Pressable style={({pressed}) => [styleInline.notificationButton, {opacity: pressed ? 0.7 : 1}]}
             onPress={handleNavigator}
           >
             <Ionicons name='notifications-outline' size={24} />
           </Pressable>
+          ) : (
+            <Pressable style={[styleInline.buttonLogin]} onPress={navigationAuthLogin}>
+              <Text>Đăng nhập</Text>
+            </Pressable>
+          )}
         </View>
         {examId && examName && (
           <View style={{padding: 10, margin: 10, backgroundColor: '#f0f8ff', borderRadius: 10}}>
@@ -74,7 +98,7 @@ export default function HomeScreen({ route }: Props) {
             Trải nghiệm làm các bài thi nhanh chóng!!
           </Text>
           <View>
-            <Pressable style={styleInline.buttonFeature} onPress={() => Alert.alert('hello anh em')}>
+            <Pressable style={({pressed}) => [styleInline.buttonFeature, {opacity: pressed ? 0.7 : 1}]} onPress={navigationFastExam}>
               <Text style={{ fontSize: 20 }}>Trắc nghiệm nhanh</Text>
             </Pressable>
           </View>
@@ -159,5 +183,11 @@ const styleInline = StyleSheet.create({
     margin: 5,
     borderRadius: 10,
     height: 'auto'
+  },
+  buttonLogin: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 5,
+    borderRadius: 5,
   }
 })

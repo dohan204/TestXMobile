@@ -7,14 +7,14 @@ import { UserContextProvider } from './hooks/useContextUser';
 
 export default function App() {
   return (
-    <UserContextProvider>
-      <NavigationContainer>
+    <NavigationContainer>
+      <UserContextProvider>
         <SafeAreaProvider>
           <PaperProvider>
             <MainApp />
           </PaperProvider>
         </SafeAreaProvider>
-      </NavigationContainer>
-    </UserContextProvider>
+      </UserContextProvider>
+    </NavigationContainer>
   );
 }

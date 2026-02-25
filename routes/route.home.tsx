@@ -18,7 +18,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 type IoniconsName = keyof typeof Ionicons.glyphMap
 
+// children sreen Comunity
+// const CommunityStack = createNativeStackNavigator<RootCommunityParamList>();
+// export const ComminityScreenAll = () => {
+//     return (
+//         <CommunityStack.Navigator initialRouteName="">
 
+//         </CommunityStack.Navigator>
+//     )
+// }
 // home tab 
 const HomeStack = createNativeStackNavigator<RootHomeTabWithChildParamList>();
 export const StackHomeTab = () => {
@@ -44,6 +52,7 @@ export const StackHomeTab = () => {
                     header: () => <Header headerTitle="Cộng đồng" />
                 }} 
             />
+            {/* </HomeStack.Screen> */}
             <HomeStack.Screen
                 name="TestOfTime"
                 component={TestOfTimeScreen}

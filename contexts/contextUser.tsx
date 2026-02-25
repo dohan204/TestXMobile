@@ -11,7 +11,7 @@ export type contextUser = {
 }
 export type UserContextType = {
     user: contextUser | null;
-    login: (user: contextUser) => void,
+    login: (user: contextUser, token: string) => void,
     logout: () => void
 }
 

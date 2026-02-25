@@ -6,7 +6,7 @@ import axios from "axios";
 import Constants from "expo-constants";
 import React from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { Question } from "../screens/exams/ExamStartingScreen";
+import { Question } from "../screens/childScreen/ExamStartingScreen";
 import AnswerQuestionTextComponent from "./AnswerQuestionTextComponent";
 type Props = {
     data: Question[],

@@ -1,8 +1,12 @@
+import ProfileHistoryExam from '@/components/comp/ProfileHistoryExam'
+import ProfileLoadingInfoComponent from '@/components/comp/ProfileLoadingInfoComponent'
+import ProfileNameInfoComponent from '@/components/comp/ProfileNameInfoComponent'
+import ProfileOverviewComponent from '@/components/comp/ProfileOverviewComponent'
+import ProfileSettingsComponent from '@/components/comp/ProfileSettingsComponent'
 import { Fonts } from '@/constants/theme'
 import { useContextUser } from '@/hooks/useContextUser'
 import useFetchs from '@/hooks/useFetchData'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { Skeleton } from '@rneui/themed'
 import React, { useMemo } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 
@@ -17,30 +21,52 @@ type ExamUserHistory = {
   score: number,
   examDate: string
 }
+
+type TestDAta = {
+  nameExamValue: string,
+  dateExamValue: string,
+  scoreExamValue: number,
+  onPressDetail?: () => void
+}
+const dataTest: TestDAta[] = [
+  {
+    nameExamValue: 'Bài thi lập trình 1',
+    dateExamValue: '2024-01-01',
+    scoreExamValue: 8.5,
+    onPressDetail: () => console.log('xem chi tiết bài thi lập trình 1')
+  },
+  {
+    nameExamValue: 'Bài thi đại cương 1',
+    dateExamValue: '2024-02-01',
+    scoreExamValue: 7.0,
+    onPressDetail: () => console.log('xem chi tiết bài thi đại cương 1')
+  },
+  {
+    nameExamValue: 'Bài thi lập trình 2',
+    dateExamValue: '2024-03-01',
+    scoreExamValue: 9.0,
+    onPressDetail: () => console.log('xem chi tiết bài thi lập trình 2')
+  },
+]
 export default function ProfileScreen() {
-  const {user} = useContextUser();
+  const { user } = useContextUser();
   const userId = user?.nameid ?? 'empty';
-  const {data, loading, error, refetch} = useFetchs<ExamUserHistory>(`https://api.testx.space/api/Exam/GetExamOfUser?accountId=${userId}`)
+  const { data, loading, error, refetch } = useFetchs<ExamUserHistory>(`https://api.testx.space/api/Exam/GetExamOfUser?accountId=${userId}`)
   const filterScore = useMemo(() => {
-    if(!data) return;
+    if (!data) return;
     return data.sort((item, index) => item.score - index.score);
   }, [data])
-  if(loading) {
+  if (loading) {
     return (
-      <View style={{flex: 1}}>
-        <Skeleton width={'100%'} height={100} style={{borderBottomLeftRadius: 24, borderBottomRightRadius: 24}} animation='pulse' />
-        <Skeleton circle width={80} height={80} style={styles.skeletonAvatar} />
-        <Skeleton width={120} height={30} style={{marginTop: 40, alignSelf: 'center'}} animation='pulse' />
-        <Skeleton width={200} height={20} style={{marginTop: 10, alignSelf: 'center'}} animation='pulse' />
-      </View>
+      <ProfileLoadingInfoComponent />
     )
   }
   return (
     <FlatList
-      style={styles.container}
-      data={filterScore}
+      data={[]}
+      renderItem={({ }) => <></>}
       ListHeaderComponent={() => (
-        <>
+        <View style={styles.container}>
           <View>
             <View style={styles.imageSwapper}>
             </View>
@@ -48,20 +74,18 @@ export default function ProfileScreen() {
               <Ionicons name='person' size={80} style={{ backgroundColor: 'white' }} />
             </View>
           </View>
-          <View style={{ marginVertical: 40 }}>
-            <Text style={{ textAlign: 'center', fontSize: 22, fontFamily: Fonts.sans, fontWeight: 500 }}>Đỗ Hân</Text>
-            <Text style={{ textAlign: 'center', fontStyle: 'italic' }}>dohan@gmail.com</Text>
-          </View>
+          <ProfileNameInfoComponent />
           <View style={styles.containerInfo}>
             <Text style={styles.headerInfo}>Hoạt động của tài khoản</Text>
-            <View style={{ gap: 10, marginVertical: 10 }}>
+            <ProfileOverviewComponent />
+            <View>
+              <Text style={styles.headerInfo}>Lịch sử làm bài gần nhất</Text>
+              <View style={{ marginVertical: 10 }}>
+                <ProfileHistoryExam />
+              </View>
             </View>
           </View>
-        </>
-      )}
-      renderItem={({item}) => (
-        <View>
-          <Text></Text>
+          <ProfileSettingsComponent />
         </View>
       )}
     />
@@ -71,6 +95,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    overflow: 'scroll'
   },
   avatarWrapper: {
     position: 'absolute',
@@ -88,7 +113,7 @@ const styles = StyleSheet.create({
   imageSwapper: {
     width: '100%',
     height: 100,
-    backgroundColor: '#00ffff',
+    backgroundColor: 'lightgray',
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     overflow: 'hidden',
@@ -100,7 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: Fonts.sans,
     fontWeight: '400'
-  }, 
+  },
   skeletonLoading: {
     width: '100%',
     height: 80,
@@ -119,6 +144,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
+  },
+  headerSettings: {
+    fontSize: 18,
+    fontFamily: Fonts.sans,
+    fontWeight: '400',
+    marginBottom: 10,
   }
 })
 

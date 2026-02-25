@@ -29,18 +29,25 @@ export default function ExamStartingScreen({ route }: Props) {
 
     const handleFetch = useCallback( async () => {
         const examId = route.params.examId;
-        if(!examId) return;
         setLoading(true);
         try {
-            const response = await fetch(`https://api.testx.space/api/Exam/examDetails/${examId}`);
+            // check dieu kiện nếu id được truyền thì gọi theo id, nếu không thì sẽ lấy ra random
+            const response = examId ? 
+                await fetch(`https://api.testx.space/api/Exam/examDetails/${examId}`) : 
+                await fetch(`https://api.testx.space/api/Exam/randomExam`);
+
+            if(!response.ok)
+                throw new Error("Fetch exam failed");
+
+            // convert data
             const resData: ExamDetails = await response.json();
-            setData(resData);
+            setData(resData); // setdata
         } catch (err) {
             console.log(err);
         } finally {
             setLoading(false);
         }
-    }, [])
+    }, [route.params?.examId])
     React.useEffect(() => {
         handleFetch();
     }, [handleFetch])

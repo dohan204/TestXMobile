@@ -33,7 +33,7 @@ export type AnswerResponse = {
 export type RootExamTabWithChildParamList = {
     Exam: undefined, // index
     ExamSubjectDetails: { subjectId: number, name?: string, code: string },
-    ExamStarting: { examId: number, examName: string, testingTime: number, numberOfQuestion: number };
+    ExamStarting: { examId?: number, examName?: string, testingTime?: number, numberOfQuestion?: number };
     ExamResult: { response: AnswerResponse };
 }
 
@@ -45,8 +45,9 @@ export type RootHomeTabWithChildParamList = {
     TestOfTime: undefined
 }
 
-export type RootComunityTabWithChildParamList = {
-    Comunity: undefined, // index
-    LeaderboardScreen: undefined,
-    PostScreen: undefined,
+export type RootCommunityParamList = {
+    CommunityHome: undefined,
+    PostDetailsScreen: undefined,
+    UserProfileScreen: undefined,
+    CreatePostScreen: undefined
 }
